@@ -1,36 +1,112 @@
-This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-app`](https://nextjs.org/docs/app/api-reference/cli/create-next-app).
+# ⚽ Football 1v1 Tracker
 
-## Getting Started
+A simple, free web app to track your best-of-5 (BO5) football 1v1 games, scores, and standings.
 
-First, run the development server:
+## 🚀 Quick Start (5 minutes)
 
+→ **[READ THIS FIRST](./QUICK_START.md)** ← All setup instructions in one place.
+
+## ✨ Features
+
+- 📝 **Record Games**: Enter BO5 match scores
+- 📊 **Leaderboard**: View standings with win rates and goal stats
+- 👥 **Player Management**: Add/manage players
+- 📈 **Game History**: Browse all recorded games
+- 🎨 **Dark UI**: Clean, modern interface
+- 💰 **Completely Free**: Vercel + Supabase free tiers
+
+## 📋 Documentation
+
+1. **[QUICK_START.md](./QUICK_START.md)** - 5-minute setup (START HERE)
+2. **[SETUP.md](./SETUP.md)** - Detailed instructions + troubleshooting
+3. **[DEPLOYMENT_CHECKLIST.md](./DEPLOYMENT_CHECKLIST.md)** - Step-by-step deployment
+4. **[PROJECT_SUMMARY.md](./PROJECT_SUMMARY.md)** - Full project overview
+
+## 💻 Tech Stack
+
+- **Frontend**: React 19 + Next.js 15 + TypeScript
+- **Database**: Supabase (PostgreSQL)
+- **Hosting**: Vercel
+- **Styling**: Tailwind CSS
+
+## 🎮 How to Use
+
+### 1. Setup (first time only)
 ```bash
-npm run dev
-# or
-yarn dev
-# or
-pnpm dev
-# or
-bun dev
+# Follow QUICK_START.md to:
+# - Create Supabase project
+# - Setup database
+# - Deploy to Vercel
 ```
 
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
+### 2. Add Players
+Go to **Players** → Add your 3 friends by name
 
-You can start editing the page by modifying `app/page.tsx`. The page auto-updates as you edit the file.
+### 3. Record Games
+Go to **New Game** → Select 2 players → Enter match scores → Save
 
-This project uses [`next/font`](https://nextjs.org/docs/app/building-your-application/optimizing/fonts) to automatically optimize and load [Geist](https://vercel.com/font), a new font family for Vercel.
+### 4. Check Standings
+Go to **Standings** → View leaderboard with stats
 
-## Learn More
+## 📊 What Gets Tracked
 
-To learn more about Next.js, take a look at the following resources:
+Per player:
+- ✅ BO5 wins/losses
+- ✅ Win percentage
+- ✅ Total goals scored/conceded
+- ✅ Goal differential
+- ✅ Game history
 
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
+## 🆓 Cost
 
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js) - your feedback and contributions are welcome!
+**$0 forever** (at your scale):
+- Vercel: Free tier
+- Supabase: Free tier (500 MB database, unlimited API)
+- No credit card required
 
-## Deploy on Vercel
+## 🛠 Development
 
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
+### Run locally
+```bash
+npm install
+npm run dev
+# Open http://localhost:3000
+```
 
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/app/building-your-application/deploying) for more details.
+### Deploy updates
+```bash
+git add .
+git commit -m "Your changes"
+git push origin main
+# Vercel auto-deploys!
+```
+
+## 📁 Project Structure
+
+```
+app/
+├── page.tsx           # Home/Dashboard
+├── new-game/          # Record game
+├── games/             # Game history
+├── leaderboard/       # Standings
+├── settings/          # Player management
+└── api/               # Backend routes
+    ├── players/       # Player API
+    ├── games/         # Games API
+    └── stats/         # Stats API
+
+lib/
+└── supabase.ts        # Database client
+
+database.sql          # Schema
+```
+
+## ❓ Need Help?
+
+1. Read **SETUP.md** - Most issues are covered
+2. Check Supabase docs: [supabase.com/docs](https://supabase.com/docs)
+3. Check Vercel docs: [vercel.com/docs](https://vercel.com/docs)
+
+## 🎉 Let's Go!
+
+Ready to deploy? Open **[QUICK_START.md](./QUICK_START.md)** now!
