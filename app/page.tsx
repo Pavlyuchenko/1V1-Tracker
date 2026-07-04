@@ -3,21 +3,22 @@
 import Link from 'next/link'
 import { useEffect, useState } from 'react'
 
-type Game = {
+type Match = {
   id: string
   player1_name: string
   player2_name: string
-  bo5_winner_name: string
+  winner_name: string
   date: string
-  matches: Array<{ player1_score: number; player2_score: number }>
+  player1_score: number
+  player2_score: number
 }
 
 type PlayerStats = {
   id: string
   name: string
-  bo5Wins: number
-  bo5Losses: number
-  bo5Total: number
+  wins: number
+  losses: number
+  total: number
   winRate: string
   goalsFor: number
   goalsAgainst: number
@@ -25,7 +26,7 @@ type PlayerStats = {
 }
 
 export default function Home() {
-  const [games, setGames] = useState<Game[]>([])
+  const [matches, setMatches] = useState<Match[]>([])
   const [stats, setStats] = useState<PlayerStats[]>([])
   const [loading, setLoading] = useState(true)
 
@@ -35,16 +36,16 @@ export default function Home() {
 
   const fetchData = async () => {
     try {
-      const [gamesRes, statsRes] = await Promise.all([
+      const [matchesRes, statsRes] = await Promise.all([
         fetch('/api/games'),
         fetch('/api/stats'),
       ])
 
-      const gamesData = await gamesRes.json()
+      const matchesData = await matchesRes.json()
       const statsData = await statsRes.json()
 
-      if (Array.isArray(gamesData)) {
-        setGames(gamesData.slice(0, 5))
+      if (Array.isArray(matchesData)) {
+        setMatches(matchesData.slice(0, 5))
       }
       if (Array.isArray(statsData)) {
         setStats(statsData)
@@ -93,7 +94,7 @@ export default function Home() {
             <div className="text-gray-600">Loading...</div>
           ) : stats.length === 0 ? (
             <div className="text-center py-12 text-gray-600">
-              <p className="mb-3">No players or games yet.</p>
+              <p className="mb-3">No players or matches yet.</p>
               <Link href="/settings" className="text-blue-600 hover:text-blue-700 font-medium inline-block">
                 👤 Add players →
               </Link>
@@ -118,8 +119,8 @@ export default function Home() {
                     >
                       <td className="px-3 py-2 font-bold text-black">#{idx + 1}</td>
                       <td className="px-3 py-2 font-semibold text-black">{player.name}</td>
-                      <td className="px-3 py-2 text-center font-bold text-blue-600">{player.bo5Wins}</td>
-                      <td className="px-3 py-2 text-center text-black font-medium">{player.bo5Losses}</td>
+                      <td className="px-3 py-2 text-center font-bold text-blue-600">{player.wins}</td>
+                      <td className="px-3 py-2 text-center text-black font-medium">{player.losses}</td>
                       <td className="px-3 py-2 text-center text-black font-medium">
                         {player.goalsFor}-{player.goalsAgainst}
                       </td>
@@ -131,43 +132,43 @@ export default function Home() {
           )}
         </div>
 
-        {/* Recent Games Section */}
+        {/* Recent Matches Section */}
         <div className="bg-white rounded-xl shadow-sm border border-gray-200 p-8">
-          <h2 className="text-2xl font-bold text-black mb-6">Recent Games</h2>
+          <h2 className="text-2xl font-bold text-black mb-6">Recent Matches</h2>
 
           {loading ? (
             <div className="text-gray-600">Loading...</div>
-          ) : games.length === 0 ? (
+          ) : matches.length === 0 ? (
             <div className="text-gray-600 text-center py-8">
-              No games recorded yet.{' '}
+              No matches recorded yet.{' '}
               <Link href="/new-game" className="text-blue-600 hover:text-blue-700 font-medium">
                 Create one!
               </Link>
             </div>
           ) : (
             <div className="space-y-3">
-              {games.map((game) => (
-                <div key={game.id} className="flex items-center justify-between p-4 border border-gray-200 rounded-lg hover:bg-gray-50 transition">
+              {matches.map((match) => (
+                <div key={match.id} className="flex items-center justify-between p-4 border border-gray-200 rounded-lg hover:bg-gray-50 transition">
                   <div className="flex-1">
                     <div className="flex items-center gap-4 mb-2">
                       <div className="text-sm text-gray-600">
-                        {new Date(game.date).toLocaleDateString('en-US', {
+                        {new Date(match.date).toLocaleDateString('en-US', {
                           month: 'short',
                           day: 'numeric',
                         })}
                       </div>
                       <div className="flex items-center gap-3 flex-1">
-                        <span className="font-semibold text-black">{game.player1_name}</span>
+                        <span className="font-semibold text-black">{match.player1_name}</span>
                         <span className="text-gray-400">vs</span>
-                        <span className="font-semibold text-black">{game.player2_name}</span>
+                        <span className="font-semibold text-black">{match.player2_name}</span>
                       </div>
                     </div>
                     <div className="text-xs text-gray-500">
-                      {game.matches.map((m, i) => `${m.player1_score}-${m.player2_score}`).join(' • ')}
+                      {match.player1_score}-{match.player2_score}
                     </div>
                   </div>
                   <div className="text-right">
-                    <div className="text-sm font-semibold text-blue-600">{game.bo5_winner_name}</div>
+                    <div className="text-sm font-semibold text-blue-600">{match.winner_name}</div>
                   </div>
                 </div>
               ))}
@@ -176,7 +177,7 @@ export default function Home() {
                 href="/games"
                 className="inline-block mt-6 text-blue-600 hover:text-blue-700 font-semibold"
               >
-                View all games →
+                View all matches →
               </Link>
             </div>
           )}

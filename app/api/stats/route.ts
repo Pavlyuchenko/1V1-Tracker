@@ -10,32 +10,25 @@ export async function GET() {
 
     if (playersError) throw playersError
 
-    const { data: games, error: gamesError } = await supabase
-      .from('games')
+    const { data: matches, error: matchesError } = await supabase
+      .from('matches')
       .select('*')
 
-    if (gamesError) throw gamesError
+    if (matchesError) throw matchesError
 
     const stats = (players || []).map((player: any) => {
-      const playerGames = (games || []).filter(
-        (game: any) => game.player1_id === player.id || game.player2_id === player.id
+      const playerMatches = (matches || []).filter(
+        (match: any) => match.player1_id === player.id || match.player2_id === player.id
       )
 
-      const wins = playerGames.filter((game: any) => game.bo5_winner_id === player.id).length
-      const losses = playerGames.length - wins
+      const wins = playerMatches.filter((match: any) => match.winner_id === player.id).length
+      const losses = playerMatches.length - wins
 
-      const goalStats = playerGames.reduce(
-        (acc: any, game: any) => {
-          const isPlayer1 = game.player1_id === player.id
-          const matchesArray = game.matches || []
-
-          const goalsFor = matchesArray.reduce((sum: number, match: any) => {
-            return sum + (isPlayer1 ? match.player1_score : match.player2_score)
-          }, 0)
-
-          const goalsAgainst = matchesArray.reduce((sum: number, match: any) => {
-            return sum + (isPlayer1 ? match.player2_score : match.player1_score)
-          }, 0)
+      const goalStats = playerMatches.reduce(
+        (acc: any, match: any) => {
+          const isPlayer1 = match.player1_id === player.id
+          const goalsFor = isPlayer1 ? match.player1_score : match.player2_score
+          const goalsAgainst = isPlayer1 ? match.player2_score : match.player1_score
 
           return {
             goalsFor: acc.goalsFor + goalsFor,
@@ -48,17 +41,17 @@ export async function GET() {
       return {
         id: player.id,
         name: player.name,
-        bo5Wins: wins,
-        bo5Losses: losses,
-        bo5Total: playerGames.length,
-        winRate: playerGames.length > 0 ? ((wins / playerGames.length) * 100).toFixed(1) : '0',
+        wins,
+        losses,
+        total: playerMatches.length,
+        winRate: playerMatches.length > 0 ? ((wins / playerMatches.length) * 100).toFixed(1) : '0',
         goalsFor: goalStats.goalsFor,
         goalsAgainst: goalStats.goalsAgainst,
         goalDiff: goalStats.goalsFor - goalStats.goalsAgainst,
       }
     })
 
-    return NextResponse.json(stats.sort((a: any, b: any) => b.bo5Wins - a.bo5Wins))
+    return NextResponse.json(stats.sort((a: any, b: any) => b.wins - a.wins))
   } catch (error) {
     return NextResponse.json({ error: 'Failed to fetch stats' }, { status: 500 })
   }

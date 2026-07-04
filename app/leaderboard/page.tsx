@@ -6,9 +6,9 @@ import { useEffect, useState } from 'react'
 type PlayerStats = {
   id: string
   name: string
-  bo5Wins: number
-  bo5Losses: number
-  bo5Total: number
+  wins: number
+  losses: number
+  total: number
   winRate: string
   goalsFor: number
   goalsAgainst: number
@@ -70,7 +70,7 @@ export default function Leaderboard() {
           <div className="text-gray-600">Loading...</div>
         ) : stats.length === 0 ? (
           <div className="text-center py-12">
-            <p className="text-gray-600 mb-4">No players or games yet.</p>
+            <p className="text-gray-600 mb-4">No players or matches yet.</p>
             <Link href="/settings" className="text-blue-600 hover:text-blue-700 font-semibold">
               Add players →
             </Link>
@@ -94,7 +94,7 @@ export default function Leaderboard() {
                   <div className="space-y-2 text-sm">
                     <div className="flex justify-between">
                       <span className="text-gray-700">Wins</span>
-                      <span className="font-bold text-blue-600">{player.bo5Wins}</span>
+                      <span className="font-bold text-blue-600">{player.wins}</span>
                     </div>
                     <div className="flex justify-between">
                       <span className="text-gray-700">Win Rate</span>
@@ -129,12 +129,12 @@ export default function Leaderboard() {
                       >
                         <td className="px-4 py-3 font-semibold text-black">#{idx + 1}</td>
                         <td className="px-4 py-3 font-semibold text-black">{player.name}</td>
-                        <td className="px-4 py-3 text-center text-black">{player.bo5Total}</td>
-                        <td className="px-4 py-3 text-center font-semibold text-blue-600">{player.bo5Wins}</td>
-                        <td className="px-4 py-3 text-center text-black">{player.bo5Losses}</td>
+                        <td className="px-4 py-3 text-center text-black">{player.total}</td>
+                        <td className="px-4 py-3 text-center font-semibold text-blue-600">{player.wins}</td>
+                        <td className="px-4 py-3 text-center text-black">{player.losses}</td>
                         <td className="px-4 py-3 text-center text-black">{player.winRate}%</td>
                         <td className="px-4 py-3 text-center text-black">
-                          {player.goalsFor} - {player.goalsAgainst}
+                          {player.goalsFor}-{player.goalsAgainst}
                         </td>
                         <td className={`px-4 py-3 text-center font-semibold ${
                           player.goalDiff > 0 ? 'text-blue-600' : 'text-black'

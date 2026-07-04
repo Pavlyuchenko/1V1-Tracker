@@ -18,19 +18,15 @@ export type Player = {
 }
 
 export type Match = {
-  player1_score: number
-  player2_score: number
-}
-
-export type Game = {
   id: string
   player1_id: string
   player2_id: string
   player1_name?: string
   player2_name?: string
+  player1_score: number
+  player2_score: number
+  winner_id: string
+  winner_name?: string
   date: string
-  bo5_winner_id: string
-  bo5_winner_name?: string
-  matches: Match[]
   created_at: string
 }

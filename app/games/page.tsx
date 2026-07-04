@@ -3,32 +3,33 @@
 import Link from 'next/link'
 import { useEffect, useState } from 'react'
 
-type Game = {
+type Match = {
   id: string
   player1_name: string
   player2_name: string
-  bo5_winner_name: string
+  winner_name: string
   date: string
-  matches: Array<{ player1_score: number; player2_score: number }>
+  player1_score: number
+  player2_score: number
 }
 
 export default function Games() {
-  const [games, setGames] = useState<Game[]>([])
+  const [matches, setMatches] = useState<Match[]>([])
   const [loading, setLoading] = useState(true)
 
   useEffect(() => {
-    fetchGames()
+    fetchMatches()
   }, [])
 
-  const fetchGames = async () => {
+  const fetchMatches = async () => {
     try {
       const res = await fetch('/api/games')
       const data = await res.json()
       if (Array.isArray(data)) {
-        setGames(data)
+        setMatches(data)
       }
     } catch (error) {
-      console.error('Failed to fetch games:', error)
+      console.error('Failed to fetch matches:', error)
     } finally {
       setLoading(false)
     }
@@ -61,75 +62,57 @@ export default function Games() {
         </div>
       </div>
 
-      {/* Games List */}
+      {/* Matches List */}
       <div className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 py-12">
         {loading ? (
           <div className="text-gray-600">Loading...</div>
-        ) : games.length === 0 ? (
+        ) : matches.length === 0 ? (
           <div className="text-center py-12">
-            <p className="text-gray-600 mb-4">No games recorded yet.</p>
+            <p className="text-gray-600 mb-4">No matches recorded yet.</p>
             <Link href="/new-game" className="text-blue-600 hover:text-blue-700 font-semibold">
-              Record your first game →
+              Record your first match →
             </Link>
           </div>
         ) : (
           <div className="space-y-3">
-            {games.map((game) => {
-              const p1Wins = game.matches.filter((m) => m.player1_score > m.player2_score).length
-              const p2Wins = game.matches.filter((m) => m.player2_score > m.player1_score).length
+            {matches.map((match) => (
+              <div
+                key={match.id}
+                className="border border-gray-200 rounded-lg p-5 hover:bg-blue-50 transition"
+              >
+                <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4">
+                  {/* Date */}
+                  <div className="text-sm text-gray-500 min-w-fit">
+                    {new Date(match.date).toLocaleDateString('en-US', {
+                      month: 'short',
+                      day: 'numeric',
+                    })}
+                  </div>
 
-              return (
-                <div
-                  key={game.id}
-                  className="border border-gray-200 rounded-lg p-5 hover:bg-blue-50 transition"
-                >
-                  <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4">
-                    {/* Date */}
-                    <div className="text-sm text-gray-500 min-w-fit">
-                      {new Date(game.date).toLocaleDateString('en-US', {
-                        month: 'short',
-                        day: 'numeric',
-                      })}
+                  {/* Match Result - Main Focus */}
+                  <div className="flex-1 flex items-center justify-center gap-4 min-w-0">
+                    <div className="text-right">
+                      <div className="font-bold text-black text-lg truncate">{match.player1_name}</div>
+                      <div className="text-3xl font-black text-blue-600 leading-none">{match.player1_score}</div>
                     </div>
 
-                    {/* Match Result - Main Focus */}
-                    <div className="flex-1 flex items-center justify-center gap-4 min-w-0">
-                      <div className="text-right">
-                        <div className="font-bold text-black text-lg truncate">{game.player1_name}</div>
-                        <div className="text-3xl font-black text-blue-600 leading-none">{p1Wins}</div>
-                      </div>
+                    <div className="text-gray-400 text-2xl font-light flex-shrink-0">-</div>
 
-                      <div className="text-gray-400 text-2xl font-light flex-shrink-0">-</div>
-
-                      <div className="text-left">
-                        <div className="font-bold text-black text-lg truncate">{game.player2_name}</div>
-                        <div className="text-3xl font-black text-blue-600 leading-none">{p2Wins}</div>
-                      </div>
+                    <div className="text-left">
+                      <div className="font-bold text-black text-lg truncate">{match.player2_name}</div>
+                      <div className="text-3xl font-black text-blue-600 leading-none">{match.player2_score}</div>
                     </div>
+                  </div>
 
-                    {/* Winner Badge */}
-                    <div className="min-w-fit">
-                      <div className="px-3 py-1 bg-blue-600 text-white text-sm font-bold rounded-full whitespace-nowrap">
-                        {game.bo5_winner_name === game.player1_name ? '✓' : '✗'} {game.bo5_winner_name}
-                      </div>
+                  {/* Winner Badge */}
+                  <div className="min-w-fit">
+                    <div className="px-3 py-1 bg-blue-600 text-white text-sm font-bold rounded-full whitespace-nowrap">
+                      {match.winner_name === match.player1_name ? '✓' : '✗'} {match.winner_name}
                     </div>
-
-                    {/* Individual Scores - Less Visible */}
-                    <details className="cursor-pointer flex-shrink-0">
-                      <summary className="text-xs text-gray-500 font-medium hover:text-gray-700">Details</summary>
-                      <div className="mt-3 pt-3 border-t border-gray-200 grid grid-cols-3 sm:grid-cols-5 gap-2">
-                        {game.matches.map((match, idx) => (
-                          <div key={idx} className="text-center text-xs">
-                            <div className="text-gray-500 mb-1">G{idx + 1}</div>
-                            <div className="text-black font-semibold">{match.player1_score}-{match.player2_score}</div>
-                          </div>
-                        ))}
-                      </div>
-                    </details>
                   </div>
                 </div>
-              )
-            })}
+              </div>
+            ))}
           </div>
         )}
       </div>
