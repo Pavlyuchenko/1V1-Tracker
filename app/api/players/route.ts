@@ -35,7 +35,7 @@ export async function POST(request: Request) {
       return NextResponse.json(data[0], { status: 201 })
     } catch (dbError: any) {
       if (dbError.code === '23505' || dbError.message?.includes('duplicate')) {
-        return NextResponse.json({ error: 'Player already exists' }, { status: 400 })
+        return NextResponse.json({ error: 'Hráč already exists' }, { status: 400 })
       }
       if (dbError.message?.includes('Missing Supabase')) {
         return NextResponse.json(
@@ -46,7 +46,7 @@ export async function POST(request: Request) {
       throw dbError
     }
   } catch (error: any) {
-    console.error('Player creation error:', error)
+    console.error('Hráč creation error:', error)
     return NextResponse.json(
       { error: error?.message || 'Failed to create player' },
       { status: 500 }

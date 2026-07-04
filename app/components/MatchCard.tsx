@@ -9,11 +9,11 @@ type Match = {
 
 export default function MatchCard({ match }: { match: Match }) {
   return (
-    <div className="border border-gray-200 rounded-lg p-5 hover:bg-blue-50 transition">
+    <div className="border border-gray-200  p-5 hover:bg-blue-50 transition">
       <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4">
         {/* Date */}
         <div className="text-sm text-gray-500 min-w-fit">
-          {new Date(match.date).toLocaleDateString('en-US', {
+          {new Date(match.date).toLocaleDateString('cs-CZ', {
             month: 'short',
             day: 'numeric',
           })}

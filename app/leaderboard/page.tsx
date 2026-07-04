@@ -2,8 +2,9 @@
 
 import Link from 'next/link'
 import { useEffect, useState } from 'react'
+import Navigation from '@/app/components/Navigation'
 
-type PlayerStats = {
+type HráčStats = {
   id: string
   name: string
   wins: number
@@ -12,11 +13,11 @@ type PlayerStats = {
   winRate: string
   goalsFor: number
   goalsAgainst: number
-  goalDiff: number
+  goalRozdíl: number
 }
 
 export default function Leaderboard() {
-  const [stats, setStats] = useState<PlayerStats[]>([])
+  const [stats, setStats] = useState<HráčStats[]>([])
   const [loading, setLoading] = useState(true)
 
   useEffect(() => {
@@ -39,40 +40,17 @@ export default function Leaderboard() {
 
   return (
     <div className="min-h-screen bg-white">
-      {/* Header */}
-      <div className="border-b border-gray-200 bg-white">
-        <div className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 py-6">
-          <div className="flex items-center justify-between gap-4">
-            <Link href="/" className="text-black hover:text-blue-600 font-bold text-lg flex-shrink-0">
-              ⚽ Malé Hoštice
-            </Link>
-            <nav className="flex gap-4 sm:gap-8 items-center flex-shrink-0">
-              <Link
-                href="/settings"
-                className="text-xs sm:text-sm text-gray-700 hover:text-blue-600 font-medium transition whitespace-nowrap"
-              >
-                Settings
-              </Link>
-              <Link
-                href="/new-game"
-                className="px-4 sm:px-8 py-2 sm:py-3 bg-gradient-to-r from-blue-600 to-blue-500 hover:from-blue-700 hover:to-blue-600 text-white font-bold text-sm sm:text-base rounded-lg transition shadow-lg flex-shrink-0"
-              >
-                New Game
-              </Link>
-            </nav>
-          </div>
-        </div>
-      </div>
+      <Navigation />
 
       {/* Leaderboard */}
       <div className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 py-12">
         {loading ? (
-          <div className="text-gray-600">Loading...</div>
+          <div className="text-gray-600">Načítání...</div>
         ) : stats.length === 0 ? (
           <div className="text-center py-12">
-            <p className="text-gray-600 mb-4">No players or matches yet.</p>
+            <p className="text-gray-600 mb-4">Zatím žádní hráči nebo zápasy.</p>
             <Link href="/settings" className="text-blue-600 hover:text-blue-700 font-semibold">
-              Add players →
+              Přidat hráče →
             </Link>
           </div>
         ) : (
@@ -82,7 +60,7 @@ export default function Leaderboard() {
               {stats.slice(0, 3).map((player, idx) => (
                 <div
                   key={player.id}
-                  className="border-2 border-blue-600 rounded-lg p-6 bg-blue-50 relative"
+                  className="border-2 border-blue-600 p-6 bg-blue-50 relative"
                 >
                   <div className="absolute top-2 right-4 text-3xl">
                     {idx === 0 ? '🥇' : idx === 1 ? '🥈' : '🥉'}
@@ -93,11 +71,11 @@ export default function Leaderboard() {
 
                   <div className="space-y-2 text-sm">
                     <div className="flex justify-between">
-                      <span className="text-gray-700">Wins</span>
+                      <span className="text-gray-700">Výhry</span>
                       <span className="font-bold text-blue-600">{player.wins}</span>
                     </div>
                     <div className="flex justify-between">
-                      <span className="text-gray-700">Win Rate</span>
+                      <span className="text-gray-700">Procento vítězství</span>
                       <span className="font-bold">{player.winRate}%</span>
                     </div>
                   </div>
@@ -106,19 +84,19 @@ export default function Leaderboard() {
             </div>
 
             {/* Full Table */}
-            <div className="border border-gray-200 rounded-lg overflow-hidden">
+            <div className="border border-gray-200 overflow-hidden">
               <div className="overflow-x-auto">
                 <table className="w-full">
                   <thead>
                     <tr className="border-b border-gray-200 bg-gray-50">
-                      <th className="px-4 py-3 text-left text-xs font-semibold text-black uppercase">Rank</th>
-                      <th className="px-4 py-3 text-left text-xs font-semibold text-black uppercase">Player</th>
-                      <th className="px-4 py-3 text-center text-xs font-semibold text-black uppercase">Matches</th>
-                      <th className="px-4 py-3 text-center text-xs font-semibold text-black uppercase">Wins</th>
-                      <th className="px-4 py-3 text-center text-xs font-semibold text-black uppercase">Losses</th>
-                      <th className="px-4 py-3 text-center text-xs font-semibold text-black uppercase">Win %</th>
-                      <th className="px-4 py-3 text-center text-xs font-semibold text-black uppercase">Goals</th>
-                      <th className="px-4 py-3 text-center text-xs font-semibold text-black uppercase">Diff</th>
+                      <th className="px-4 py-3 text-left text-xs font-semibold text-black uppercase">Pořadí</th>
+                      <th className="px-4 py-3 text-left text-xs font-semibold text-black uppercase">Hráč</th>
+                      <th className="px-4 py-3 text-center text-xs font-semibold text-black uppercase">Zápasy</th>
+                      <th className="px-4 py-3 text-center text-xs font-semibold text-black uppercase">Výhry</th>
+                      <th className="px-4 py-3 text-center text-xs font-semibold text-black uppercase">Prohry</th>
+                      <th className="px-4 py-3 text-center text-xs font-semibold text-black uppercase">Procento vítězství</th>
+                      <th className="px-4 py-3 text-center text-xs font-semibold text-black uppercase">Góly</th>
+                      <th className="px-4 py-3 text-center text-xs font-semibold text-black uppercase">Rozdíl</th>
                     </tr>
                   </thead>
                   <tbody>
@@ -137,9 +115,9 @@ export default function Leaderboard() {
                           {player.goalsFor}-{player.goalsAgainst}
                         </td>
                         <td className={`px-4 py-3 text-center font-semibold ${
-                          player.goalDiff > 0 ? 'text-blue-600' : 'text-black'
+                          player.goalRozdíl > 0 ? 'text-blue-600' : 'text-black'
                         }`}>
-                          {player.goalDiff > 0 ? '+' : ''}{player.goalDiff}
+                          {player.goalRozdíl > 0 ? '+' : ''}{player.goalRozdíl}
                         </td>
                       </tr>
                     ))}

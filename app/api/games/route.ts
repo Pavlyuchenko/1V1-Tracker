@@ -9,7 +9,7 @@ export async function GET() {
       .select('*')
       .order('date', { ascending: false })
 
-    const enrichedMatches = await Promise.all(
+    const enrichedZápasy = await Promise.all(
       matches?.map(async (match: any) => {
         const [p1, p2, winner] = await Promise.all([
           supabase.from('players').select('name').eq('id', match.player1_id).single(),
@@ -25,7 +25,7 @@ export async function GET() {
       }) || []
     )
 
-    return NextResponse.json(enrichedMatches)
+    return NextResponse.json(enrichedZápasy)
   } catch (error) {
     return NextResponse.json({ error: 'Failed to fetch matches' }, { status: 500 })
   }
@@ -59,6 +59,6 @@ export async function POST(request: Request) {
     if (error) throw error
     return NextResponse.json(data[0], { status: 201 })
   } catch (error) {
-    return NextResponse.json({ error: 'Failed to create match' }, { status: 500 })
+    return NextResponse.json({ error: 'Vytvoření zápasu se nezdařilo' }, { status: 500 })
   }
 }

@@ -3,43 +3,44 @@
 import Link from 'next/link'
 import { useRouter } from 'next/navigation'
 import { useEffect, useState } from 'react'
+import Navigation from '@/app/components/Navigation'
 
-type Player = {
+type Hráč = {
   id: string
   name: string
 }
 
 export default function NewGame() {
   const router = useRouter()
-  const [players, setPlayers] = useState<Player[]>([])
-  const [player1Id, setPlayer1Id] = useState('')
-  const [player2Id, setPlayer2Id] = useState('')
-  const [player1Score, setPlayer1Score] = useState(0)
-  const [player2Score, setPlayer2Score] = useState(0)
+  const [players, setHráčs] = useState<Hráč[]>([])
+  const [player1Id, setHráč1Id] = useState('')
+  const [player2Id, setHráč2Id] = useState('')
+  const [player1Score, setHráč1Score] = useState(0)
+  const [player2Score, setHráč2Score] = useState(0)
   const [matchDate, setMatchDate] = useState(new Date().toISOString().split('T')[0])
   const [loading, setLoading] = useState(true)
   const [submitting, setSubmitting] = useState(false)
   const [error, setError] = useState('')
 
   useEffect(() => {
-    fetchPlayers()
+    fetchHráčs()
   }, [])
 
-  const fetchPlayers = async () => {
+  const fetchHráčs = async () => {
     try {
       const res = await fetch('/api/players')
       const data = await res.json()
       if (Array.isArray(data)) {
-        setPlayers(data)
+        setHráčs(data)
         if (data.length >= 2) {
-          setPlayer1Id(data[0].id)
-          setPlayer2Id(data[1].id)
+          setHráč1Id(data[0].id)
+          setHráč2Id(data[1].id)
         }
       } else {
-        setError('Failed to load players')
+        setError('Načtení hráčů se nezdařilo')
       }
     } catch (error) {
-      setError('Failed to load players')
+      setError('Načtení hráčů se nezdařilo')
     } finally {
       setLoading(false)
     }
@@ -50,7 +51,7 @@ export default function NewGame() {
     setError('')
 
     if (!player1Id || !player2Id || player1Id === player2Id) {
-      setError('Please select two different players')
+      setError('Vyberte si dva různé hráče')
       return
     }
 
@@ -69,11 +70,11 @@ export default function NewGame() {
         }),
       })
 
-      if (!res.ok) throw new Error('Failed to create match')
+      if (!res.ok) throw new Error('Vytvoření zápasu se nezdařilo')
 
       router.push('/games')
     } catch (error) {
-      setError('Failed to save match')
+      setError('Uložení zápasu se nezdařilo')
     } finally {
       setSubmitting(false)
     }
@@ -83,41 +84,26 @@ export default function NewGame() {
 
   return (
     <div className="min-h-screen bg-white">
-      {/* Header */}
-      <div className="border-b border-gray-200 bg-white">
-        <div className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 py-6">
-          <div className="flex items-center justify-between gap-4">
-            <Link href="/" className="text-black hover:text-blue-600 font-bold text-lg flex-shrink-0">
-              ⚽ Malé Hoštice
-            </Link>
-            <Link
-              href="/settings"
-              className="text-xs sm:text-sm text-gray-700 hover:text-blue-600 font-medium transition whitespace-nowrap"
-            >
-              Settings
-            </Link>
-          </div>
-        </div>
-      </div>
+      <Navigation />
 
       {/* Form */}
-      <div className="max-w-2xl mx-auto px-4 sm:px-6 lg:px-8 py-12">
-        <h1 className="text-3xl font-bold text-black mb-8">Record New Match</h1>
+      <div className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 py-12">
+        <h1 className="text-3xl font-bold text-black mb-8">Zaznamenat nový zápas</h1>
 
         <form onSubmit={handleSubmit} className="space-y-8">
-          {/* Player Selection */}
-          <div className="border border-gray-200 rounded-lg p-6">
-            <h2 className="text-lg font-bold text-black mb-4">Select Players</h2>
+          {/* Hráč Selection */}
+          <div className="border border-gray-200 p-6">
+            <h2 className="text-lg font-bold text-black mb-4">Vybrat hráče</h2>
 
             <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
               <div>
-                <label className="block text-sm font-medium text-black mb-2">Player 1</label>
+                <label className="block text-sm font-medium text-black mb-2">Hráč 1</label>
                 <select
                   value={player1Id}
-                  onChange={(e) => setPlayer1Id(e.target.value)}
-                  className="w-full px-4 py-2 border border-gray-300 rounded-lg text-black"
+                  onChange={(e) => setHráč1Id(e.target.value)}
+                  className="w-full px-4 py-2 border border-gray-300 text-black"
                 >
-                  <option value="">Select player</option>
+                  <option value="">Vybrat hráče</option>
                   {players.map((p) => (
                     <option key={p.id} value={p.id}>
                       {p.name}
@@ -127,13 +113,13 @@ export default function NewGame() {
               </div>
 
               <div>
-                <label className="block text-sm font-medium text-black mb-2">Player 2</label>
+                <label className="block text-sm font-medium text-black mb-2">Hráč 2</label>
                 <select
                   value={player2Id}
-                  onChange={(e) => setPlayer2Id(e.target.value)}
-                  className="w-full px-4 py-2 border border-gray-300 rounded-lg text-black"
+                  onChange={(e) => setHráč2Id(e.target.value)}
+                  className="w-full px-4 py-2 border border-gray-300 text-black"
                 >
-                  <option value="">Select player</option>
+                  <option value="">Vybrat hráče</option>
                   {players.map((p) => (
                     <option key={p.id} value={p.id}>
                       {p.name}
@@ -144,21 +130,21 @@ export default function NewGame() {
             </div>
           </div>
 
-          {/* Match Date */}
-          <div className="border border-gray-200 rounded-lg p-6">
-            <label className="block text-sm font-medium text-black mb-2">Match Date</label>
+          {/* Datum zápasu */}
+          <div className="border border-gray-200 p-6">
+            <label className="block text-sm font-medium text-black mb-2">Datum zápasu</label>
             <input
               type="date"
               value={matchDate}
               onChange={(e) => setMatchDate(e.target.value)}
-              className="w-full px-4 py-2 border border-gray-300 rounded-lg text-black"
+              className="w-full px-4 py-2 border border-gray-300 text-black"
             />
           </div>
 
           {/* Scores */}
           {player1Id && player2Id && (
-            <div className="border border-gray-200 rounded-lg p-6">
-              <h2 className="text-lg font-bold text-black mb-6">Enter Score</h2>
+            <div className="border border-gray-200 p-6">
+              <h2 className="text-lg font-bold text-black mb-6">Zadat skóre</h2>
 
               <div className="flex items-center justify-between gap-6">
                 <div className="flex-1 text-center">
@@ -168,18 +154,18 @@ export default function NewGame() {
                   <div className="flex items-center justify-center gap-3">
                     <button
                       type="button"
-                      onClick={() => setPlayer1Score(Math.max(0, player1Score - 1))}
-                      className="px-4 py-2 bg-gray-200 hover:bg-gray-300 text-black font-bold rounded-lg transition"
+                      onClick={() => setHráč1Score(Math.max(0, player1Score - 1))}
+                      className="px-4 py-2 bg-gray-200 hover:bg-gray-300 text-black font-bold transition"
                     >
                       −
                     </button>
-                    <div className="w-20 px-4 py-3 text-center border border-gray-300 rounded-lg text-3xl font-bold text-blue-600 bg-white">
+                    <div className="w-20 px-4 py-3 text-center border border-gray-300 text-3xl font-bold text-blue-600 bg-white">
                       {player1Score}
                     </div>
                     <button
                       type="button"
-                      onClick={() => setPlayer1Score(Math.min(5, player1Score + 1))}
-                      className="px-4 py-2 bg-gray-200 hover:bg-gray-300 text-black font-bold rounded-lg transition"
+                      onClick={() => setHráč1Score(Math.min(5, player1Score + 1))}
+                      className="px-4 py-2 bg-gray-200 hover:bg-gray-300 text-black font-bold transition"
                     >
                       +
                     </button>
@@ -195,18 +181,18 @@ export default function NewGame() {
                   <div className="flex items-center justify-center gap-3">
                     <button
                       type="button"
-                      onClick={() => setPlayer2Score(Math.max(0, player2Score - 1))}
-                      className="px-4 py-2 bg-gray-200 hover:bg-gray-300 text-black font-bold rounded-lg transition"
+                      onClick={() => setHráč2Score(Math.max(0, player2Score - 1))}
+                      className="px-4 py-2 bg-gray-200 hover:bg-gray-300 text-black font-bold transition"
                     >
                       −
                     </button>
-                    <div className="w-20 px-4 py-3 text-center border border-gray-300 rounded-lg text-3xl font-bold text-blue-600 bg-white">
+                    <div className="w-20 px-4 py-3 text-center border border-gray-300 text-3xl font-bold text-blue-600 bg-white">
                       {player2Score}
                     </div>
                     <button
                       type="button"
-                      onClick={() => setPlayer2Score(Math.min(5, player2Score + 1))}
-                      className="px-4 py-2 bg-gray-200 hover:bg-gray-300 text-black font-bold rounded-lg transition"
+                      onClick={() => setHráč2Score(Math.min(5, player2Score + 1))}
+                      className="px-4 py-2 bg-gray-200 hover:bg-gray-300 text-black font-bold transition"
                     >
                       +
                     </button>
@@ -218,9 +204,9 @@ export default function NewGame() {
 
           {/* Winner Preview */}
           {player1Score !== player2Score && player1Id && player2Id && (
-            <div className="border-2 border-blue-600 rounded-lg p-6 bg-blue-50">
+            <div className="border-2 border-blue-600 p-6 bg-blue-50">
               <div className="text-center">
-                <div className="text-sm text-gray-600 mb-2">WINNER</div>
+                <div className="text-sm text-gray-600 mb-2">VÍTĚZ</div>
                 <div className="text-2xl font-bold text-blue-600">
                   {player1Score > player2Score
                     ? players.find((p) => p.id === player1Id)?.name
@@ -230,15 +216,15 @@ export default function NewGame() {
             </div>
           )}
 
-          {error && <div className="p-4 bg-red-50 border border-red-200 rounded-lg text-red-700">{error}</div>}
+          {error && <div className="p-4 bg-red-50 border border-red-200 text-red-700">{error}</div>}
 
           {/* Submit Button */}
           <button
             type="submit"
             disabled={submitting || !player1Id || !player2Id || player1Id === player2Id}
-            className="w-full py-3 bg-blue-600 hover:bg-blue-700 disabled:opacity-50 disabled:cursor-not-allowed text-white font-bold rounded-lg transition"
+            className="w-full py-3 bg-blue-600 hover:bg-blue-700 disabled:opacity-50 disabled:cursor-not-allowed text-white font-bold transition"
           >
-            {submitting ? 'Saving...' : 'Save Match'}
+            {submitting ? 'Ukládání...' : 'Uložit zápas'}
           </button>
         </form>
       </div>

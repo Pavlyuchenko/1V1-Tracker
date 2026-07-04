@@ -2,6 +2,7 @@
 
 import Link from 'next/link'
 import { useEffect, useState } from 'react'
+import Navigation from '@/app/components/Navigation'
 import MatchCard from '@/app/components/MatchCard'
 
 type Match = {
@@ -13,7 +14,7 @@ type Match = {
   player2_score: number
 }
 
-type PlayerStats = {
+type HráčStats = {
   id: string
   name: string
   wins: number
@@ -22,12 +23,12 @@ type PlayerStats = {
   winRate: string
   goalsFor: number
   goalsAgainst: number
-  goalDiff: number
+  goalRozdíl: number
 }
 
 export default function Home() {
-  const [matches, setMatches] = useState<Match[]>([])
-  const [stats, setStats] = useState<PlayerStats[]>([])
+  const [matches, setZápasy] = useState<Match[]>([])
+  const [stats, setStats] = useState<HráčStats[]>([])
   const [loading, setLoading] = useState(true)
 
   useEffect(() => {
@@ -45,7 +46,7 @@ export default function Home() {
       const statsData = await statsRes.json()
 
       if (Array.isArray(matchesData)) {
-        setMatches(matchesData.slice(0, 5))
+        setZápasy(matchesData.slice(0, 5))
       }
       if (Array.isArray(statsData)) {
         setStats(statsData)
@@ -59,44 +60,21 @@ export default function Home() {
 
   return (
     <div className="min-h-screen bg-gray-50">
-      {/* Header */}
-      <div className="border-b border-gray-200 bg-white">
-        <div className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 py-6">
-          <div className="flex items-center justify-between gap-4">
-            <div>
-              <h1 className="text-lg font-bold text-black">⚽ Malé Hoštice</h1>
-            </div>
-            <nav className="flex gap-4 sm:gap-8 items-center flex-shrink-0">
-              <Link
-                href="/settings"
-                className="text-xs sm:text-sm text-gray-700 hover:text-blue-600 font-medium transition whitespace-nowrap"
-              >
-                Settings
-              </Link>
-              <Link
-                href="/new-game"
-                className="px-4 sm:px-8 py-2 sm:py-3 bg-gradient-to-r from-blue-600 to-blue-500 hover:from-blue-700 hover:to-blue-600 text-white font-bold text-sm sm:text-base rounded-lg transition shadow-lg flex-shrink-0"
-              >
-                New Game
-              </Link>
-            </nav>
-          </div>
-        </div>
-      </div>
+      <Navigation />
 
       {/* Main Content */}
       <div className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
-        {/* Standings Section */}
-        <div className="mb-12 bg-white rounded-xl shadow-sm border border-gray-200 p-8">
-          <h2 className="text-2xl font-bold text-black mb-6">Standings</h2>
+        {/* Tabulka Section */}
+        <div className="mb-12 bg-white shadow-sm border border-gray-200 p-8">
+          <h2 className="text-2xl font-bold text-black mb-6">Tabulka</h2>
 
           {loading ? (
-            <div className="text-gray-600">Loading...</div>
+            <div className="text-gray-600">Načítání...</div>
           ) : stats.length === 0 ? (
             <div className="text-center py-12 text-gray-600">
-              <p className="mb-3">No players or matches yet.</p>
+              <p className="mb-3">Zatím žádní hráči nebo zápasy.</p>
               <Link href="/settings" className="text-blue-600 hover:text-blue-700 font-medium inline-block">
-                👤 Add players →
+                👤 Přidat hráče →
               </Link>
             </div>
           ) : (
@@ -104,11 +82,11 @@ export default function Home() {
               <table className="w-full">
                 <thead>
                   <tr className="border-b-2 border-blue-200">
-                    <th className="px-3 py-2 text-left text-sm font-bold text-black">Rank</th>
-                    <th className="px-3 py-2 text-left text-sm font-bold text-black">Player</th>
-                    <th className="px-3 py-2 text-center text-sm font-bold text-blue-600">Wins</th>
-                    <th className="px-3 py-2 text-center text-sm font-bold text-black">Losses</th>
-                    <th className="px-3 py-2 text-center text-sm font-bold text-black">Goals</th>
+                    <th className="px-3 py-2 text-left text-sm font-bold text-black">Pořadí</th>
+                    <th className="px-3 py-2 text-left text-sm font-bold text-black">Hráč</th>
+                    <th className="px-3 py-2 text-center text-sm font-bold text-blue-600">Výhry</th>
+                    <th className="px-3 py-2 text-center text-sm font-bold text-black">Prohry</th>
+                    <th className="px-3 py-2 text-center text-sm font-bold text-black">Góly</th>
                   </tr>
                 </thead>
                 <tbody>
@@ -132,17 +110,17 @@ export default function Home() {
           )}
         </div>
 
-        {/* Recent Matches Section */}
-        <div className="bg-white rounded-xl shadow-sm border border-gray-200 p-8">
-          <h2 className="text-2xl font-bold text-black mb-6">Recent Matches</h2>
+        {/* Poslední zápasy Section */}
+        <div className="bg-white shadow-sm border border-gray-200 p-8">
+          <h2 className="text-2xl font-bold text-black mb-6">Poslední zápasy</h2>
 
           {loading ? (
-            <div className="text-gray-600">Loading...</div>
+            <div className="text-gray-600">Načítání...</div>
           ) : matches.length === 0 ? (
             <div className="text-gray-600 text-center py-8">
-              No matches recorded yet.{' '}
+              Zatím nejsou zaznamenány žádné zápasy.{' '}
               <Link href="/new-game" className="text-blue-600 hover:text-blue-700 font-medium">
-                Create one!
+                Vytvoř jeden!
               </Link>
             </div>
           ) : (
@@ -155,7 +133,7 @@ export default function Home() {
                 href="/games"
                 className="inline-block mt-6 text-blue-600 hover:text-blue-700 font-semibold"
               >
-                View all matches →
+                Zobrazit všechny zápasy →
               </Link>
             </div>
           )}

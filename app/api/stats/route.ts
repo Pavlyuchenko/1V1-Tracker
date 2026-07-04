@@ -17,18 +17,18 @@ export async function GET() {
     if (matchesError) throw matchesError
 
     const stats = (players || []).map((player: any) => {
-      const playerMatches = (matches || []).filter(
+      const playerZápasy = (matches || []).filter(
         (match: any) => match.player1_id === player.id || match.player2_id === player.id
       )
 
-      const wins = playerMatches.filter((match: any) => match.winner_id === player.id).length
-      const losses = playerMatches.length - wins
+      const wins = playerZápasy.filter((match: any) => match.winner_id === player.id).length
+      const losses = playerZápasy.length - wins
 
-      const goalStats = playerMatches.reduce(
+      const goalStats = playerZápasy.reduce(
         (acc: any, match: any) => {
-          const isPlayer1 = match.player1_id === player.id
-          const goalsFor = isPlayer1 ? match.player1_score : match.player2_score
-          const goalsAgainst = isPlayer1 ? match.player2_score : match.player1_score
+          const isHráč1 = match.player1_id === player.id
+          const goalsFor = isHráč1 ? match.player1_score : match.player2_score
+          const goalsAgainst = isHráč1 ? match.player2_score : match.player1_score
 
           return {
             goalsFor: acc.goalsFor + goalsFor,
@@ -43,11 +43,11 @@ export async function GET() {
         name: player.name,
         wins,
         losses,
-        total: playerMatches.length,
-        winRate: playerMatches.length > 0 ? ((wins / playerMatches.length) * 100).toFixed(1) : '0',
+        total: playerZápasy.length,
+        winRate: playerZápasy.length > 0 ? ((wins / playerZápasy.length) * 100).toFixed(1) : '0',
         goalsFor: goalStats.goalsFor,
         goalsAgainst: goalStats.goalsAgainst,
-        goalDiff: goalStats.goalsFor - goalStats.goalsAgainst,
+        goalRozdíl: goalStats.goalsFor - goalStats.goalsAgainst,
       }
     })
 
