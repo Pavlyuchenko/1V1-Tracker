@@ -2,12 +2,12 @@
 
 import Link from 'next/link'
 import { useEffect, useState } from 'react'
+import MatchCard from '@/app/components/MatchCard'
 
 type Match = {
   id: string
   player1_name: string
   player2_name: string
-  winner_name: string
   date: string
   player1_score: number
   player2_score: number
@@ -148,29 +148,7 @@ export default function Home() {
           ) : (
             <div className="space-y-3">
               {matches.map((match) => (
-                <div key={match.id} className="flex items-center justify-between p-4 border border-gray-200 rounded-lg hover:bg-gray-50 transition">
-                  <div className="flex-1">
-                    <div className="flex items-center gap-4 mb-2">
-                      <div className="text-sm text-gray-600">
-                        {new Date(match.date).toLocaleDateString('en-US', {
-                          month: 'short',
-                          day: 'numeric',
-                        })}
-                      </div>
-                      <div className="flex items-center gap-3 flex-1">
-                        <span className="font-semibold text-black">{match.player1_name}</span>
-                        <span className="text-gray-400">vs</span>
-                        <span className="font-semibold text-black">{match.player2_name}</span>
-                      </div>
-                    </div>
-                    <div className="text-xs text-gray-500">
-                      {match.player1_score}-{match.player2_score}
-                    </div>
-                  </div>
-                  <div className="text-right">
-                    <div className="text-sm font-semibold text-blue-600">{match.winner_name}</div>
-                  </div>
-                </div>
+                <MatchCard key={match.id} match={match} />
               ))}
 
               <Link
