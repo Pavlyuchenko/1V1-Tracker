@@ -17,18 +17,18 @@ export default function Navigation() {
 
   return (
     <div className="border-b border-gray-200 bg-white">
-      <div className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 py-6">
-        <div className="flex items-center justify-between gap-4">
-          <Link href="/" className="text-black hover:text-blue-600 font-bold text-lg flex-shrink-0">
+      <div className="max-w-4xl mx-auto px-3 sm:px-6 lg:px-8 py-4 sm:py-6">
+        <div className="flex items-center justify-between gap-2 sm:gap-4 min-w-0">
+          <Link href="/" className="text-black hover:text-blue-600 font-bold text-base sm:text-lg flex-shrink-0 whitespace-nowrap">
             ⚽ Překopávaná
           </Link>
-          <nav className="flex gap-4 sm:gap-8 items-center flex-shrink-0">
+          <nav className="flex gap-2 sm:gap-4 items-center flex-shrink-0">
             {defaultLinks.map((link) =>
               link.isButton ? (
                 <Link
                   key={link.href}
                   href={link.href}
-                  className="px-4 sm:px-8 py-2 sm:py-3 bg-gradient-to-r from-blue-600 to-blue-500 hover:from-blue-700 hover:to-blue-600 text-white font-bold text-sm sm:text-base transition shadow-lg flex-shrink-0"
+                  className="px-2 sm:px-8 py-1.5 sm:py-3 bg-gradient-to-r from-blue-600 to-blue-500 hover:from-blue-700 hover:to-blue-600 text-white font-bold text-xs sm:text-base transition shadow-lg flex-shrink-0"
                 >
                   {link.label}
                 </Link>

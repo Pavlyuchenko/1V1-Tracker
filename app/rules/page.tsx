@@ -9,11 +9,11 @@ export default function Pravidla() {
       <Navigation />
 
       {/* Content */}
-      <div className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 py-12">
-        <h1 className="text-3xl font-bold text-black mb-8">Pravidla</h1>
+      <div className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 py-8 sm:py-12">
+        <h1 className="text-2xl sm:text-3xl font-bold text-black mb-6 sm:mb-8">Pravidla</h1>
 
-        <div className="bg-gray-50 border border-gray-200 p-8 space-y-6 text-gray-800">
-          <h2 className="text-2xl font-bold text-black mt-4">
+        <div className="bg-gray-50 border border-gray-200 p-5 sm:p-8 space-y-5 sm:space-y-6 text-gray-800 text-sm sm:text-base">
+          <h2 className="text-xl sm:text-2xl font-bold text-black mt-3 sm:mt-4">
             1. Základní Principy
           </h2>
           <p>
@@ -21,7 +21,7 @@ export default function Pravidla() {
             Cílem je vstřelit pět gólů bez časového omezení.
           </p>
 
-          <h2 className="text-2xl font-bold text-black mt-4">
+          <h2 className="text-xl sm:text-2xl font-bold text-black mt-3 sm:mt-4">
             2. Zahájení a Rozehrávka
           </h2>
           <p>
@@ -40,7 +40,7 @@ export default function Pravidla() {
             provést okamžitě.
           </p>
 
-          <h2 className="text-2xl font-bold text-black mt-4">
+          <h2 className="text-xl sm:text-2xl font-bold text-black mt-3 sm:mt-4">
             3. Počet Dotyků
           </h2>
           <p>
@@ -56,7 +56,7 @@ export default function Pravidla() {
             dotyk k dispozici.
           </p>
 
-          <h2 className="text-2xl font-bold text-black mt-4">
+          <h2 className="text-xl sm:text-2xl font-bold text-black mt-3 sm:mt-4">
             4. Míč Mimo Hřiště
           </h2>
           <p>
@@ -70,7 +70,7 @@ export default function Pravidla() {
             dvěma dotyky.
           </p>
 
-          <h2 className="text-2xl font-bold text-black mt-4">5. Fauly</h2>
+          <h2 className="text-xl sm:text-2xl font-bold text-black mt-3 sm:mt-4">5. Fauly</h2>
           <p>
             <strong>5.1</strong> Fauly se posuzují stejně jako v klasickém
             fotbale (hru rukou, drsný kontakt, podražení apod.).
@@ -81,7 +81,7 @@ export default function Pravidla() {
             dva dotyky na restart.
           </p>
 
-          <h2 className="text-2xl font-bold text-black mt-4">6. Gól</h2>
+          <h2 className="text-xl sm:text-2xl font-bold text-black mt-3 sm:mt-4">6. Gól</h2>
           <p>
             <strong>6.1</strong> Gól je vstřelen, pokud míč překročí čáru za
             bránou soupeře.
@@ -91,13 +91,13 @@ export default function Pravidla() {
             rozehrávku ze své brankářské oblasti.
           </p>
 
-          <h2 className="text-2xl font-bold text-black mt-4">7. Vítězství</h2>
+          <h2 className="text-xl sm:text-2xl font-bold text-black mt-3 sm:mt-4">7. Vítězství</h2>
           <p>První hráč, který vstřelí pět gólů, je vítězem zápasu.</p>
         </div>
 
         <Link
           href="/"
-          className="inline-block mt-8 text-blue-600 hover:text-blue-700 font-semibold"
+          className="inline-block mt-6 sm:mt-8 text-blue-600 hover:text-blue-700 font-semibold text-sm sm:text-base"
         >
           ← Zpět na domovskou stránku
         </Link>

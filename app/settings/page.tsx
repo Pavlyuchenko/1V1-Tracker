@@ -78,36 +78,36 @@ export default function Nastavení() {
       <Navigation />
 
       {/* Nastavení */}
-      <div className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 py-12">
+      <div className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 py-8 sm:py-12">
         {/* Add New Hráč */}
-        <div className="border border-gray-200 p-6 mb-8">
-          <h2 className="text-lg font-bold text-black mb-4">Přidat nového hráče</h2>
+        <div className="border border-gray-200 p-4 sm:p-6 mb-6 sm:mb-8">
+          <h2 className="text-base sm:text-lg font-bold text-black mb-4">Přidat nového hráče</h2>
 
-          <form onSubmit={handleAddHráč} className="flex gap-3">
+          <form onSubmit={handleAddHráč} className="flex flex-col sm:flex-row gap-2 sm:gap-3">
             <input
               type="text"
               placeholder="Jméno hráče"
               value={newHráčName}
               onChange={(e) => setNewHráčName(e.target.value)}
-              className="flex-1 px-4 py-2 border border-gray-300 text-black placeholder-gray-500"
+              className="flex-1 px-3 sm:px-4 py-2 border border-gray-300 text-black placeholder-gray-500 text-sm sm:text-base"
               autoFocus
             />
             <button
               type="submit"
               disabled={submitting}
-              className="px-6 py-2 bg-blue-600 hover:bg-blue-700 disabled:opacity-50 text-white font-semibold transition"
+              className="px-4 sm:px-6 py-2 bg-blue-600 hover:bg-blue-700 disabled:opacity-50 text-white font-semibold transition text-sm sm:text-base"
             >
               {submitting ? 'Přidávání...' : 'Přidat'}
             </button>
           </form>
 
-          {error && <div className="mt-3 p-3 bg-red-100 border border-red-300 text-red-700 text-sm">{error}</div>}
-          {success && <div className="mt-3 p-3 bg-green-100 border border-green-300 text-green-700 text-sm">{success}</div>}
+          {error && <div className="mt-3 p-3 bg-red-100 border border-red-300 text-red-700 text-xs sm:text-sm">{error}</div>}
+          {success && <div className="mt-3 p-3 bg-green-100 border border-green-300 text-green-700 text-xs sm:text-sm">{success}</div>}
         </div>
 
         {/* Hráčs List */}
-        <div className="border border-gray-200 p-6">
-          <h2 className="text-lg font-bold text-black mb-4">Aktuální hráči</h2>
+        <div className="border border-gray-200 p-4 sm:p-6">
+          <h2 className="text-base sm:text-lg font-bold text-black mb-4">Aktuální hráči</h2>
 
           {loading ? (
             <div className="text-gray-600">Načítání...</div>
