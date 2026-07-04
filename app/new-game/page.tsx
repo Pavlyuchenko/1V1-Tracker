@@ -165,14 +165,25 @@ export default function NewGame() {
                   <label className="block text-sm font-medium text-black mb-3">
                     {players.find((p) => p.id === player1Id)?.name}
                   </label>
-                  <input
-                    type="number"
-                    min="0"
-                    max="5"
-                    value={player1Score}
-                    onChange={(e) => setPlayer1Score(parseInt(e.target.value) || 0)}
-                    className="w-full px-4 py-3 text-center border border-gray-300 rounded-lg text-2xl font-bold text-blue-600"
-                  />
+                  <div className="flex items-center justify-center gap-3">
+                    <button
+                      type="button"
+                      onClick={() => setPlayer1Score(Math.max(0, player1Score - 1))}
+                      className="px-4 py-2 bg-gray-200 hover:bg-gray-300 text-black font-bold rounded-lg transition"
+                    >
+                      −
+                    </button>
+                    <div className="w-20 px-4 py-3 text-center border border-gray-300 rounded-lg text-3xl font-bold text-blue-600 bg-white">
+                      {player1Score}
+                    </div>
+                    <button
+                      type="button"
+                      onClick={() => setPlayer1Score(Math.min(5, player1Score + 1))}
+                      className="px-4 py-2 bg-gray-200 hover:bg-gray-300 text-black font-bold rounded-lg transition"
+                    >
+                      +
+                    </button>
+                  </div>
                 </div>
 
                 <div className="text-3xl font-light text-gray-400">vs</div>
@@ -181,14 +192,25 @@ export default function NewGame() {
                   <label className="block text-sm font-medium text-black mb-3">
                     {players.find((p) => p.id === player2Id)?.name}
                   </label>
-                  <input
-                    type="number"
-                    min="0"
-                    max="5"
-                    value={player2Score}
-                    onChange={(e) => setPlayer2Score(parseInt(e.target.value) || 0)}
-                    className="w-full px-4 py-3 text-center border border-gray-300 rounded-lg text-2xl font-bold text-blue-600"
-                  />
+                  <div className="flex items-center justify-center gap-3">
+                    <button
+                      type="button"
+                      onClick={() => setPlayer2Score(Math.max(0, player2Score - 1))}
+                      className="px-4 py-2 bg-gray-200 hover:bg-gray-300 text-black font-bold rounded-lg transition"
+                    >
+                      −
+                    </button>
+                    <div className="w-20 px-4 py-3 text-center border border-gray-300 rounded-lg text-3xl font-bold text-blue-600 bg-white">
+                      {player2Score}
+                    </div>
+                    <button
+                      type="button"
+                      onClick={() => setPlayer2Score(Math.min(5, player2Score + 1))}
+                      className="px-4 py-2 bg-gray-200 hover:bg-gray-300 text-black font-bold rounded-lg transition"
+                    >
+                      +
+                    </button>
+                  </div>
                 </div>
               </div>
             </div>
