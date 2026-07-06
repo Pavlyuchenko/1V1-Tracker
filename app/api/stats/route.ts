@@ -51,7 +51,18 @@ export async function GET() {
       }
     })
 
-    return NextResponse.json(stats.sort((a: any, b: any) => b.wins - a.wins))
+    return NextResponse.json(
+      stats.sort((a: any, b: any) => {
+        const ratioB = b.losses === 0 ? b.wins : b.wins / b.losses
+        const ratioA = a.losses === 0 ? a.wins : a.wins / a.losses
+
+        if (ratioB !== ratioA) {
+          return ratioB - ratioA
+        }
+
+        return b.wins - a.wins
+      })
+    )
   } catch (error) {
     return NextResponse.json({ error: 'Failed to fetch stats' }, { status: 500 })
   }
