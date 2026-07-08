@@ -12,6 +12,7 @@ type Match = {
   date: string
   player1_score: number
   player2_score: number
+  created_by?: string
 }
 
 export default function Games() {

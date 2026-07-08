@@ -4,6 +4,8 @@ import Link from 'next/link'
 import { useRouter } from 'next/navigation'
 import { useEffect, useState } from 'react'
 import Navigation from '@/app/components/Navigation'
+import AuthGuard from '@/app/components/AuthGuard'
+import { getAuthUser } from '@/lib/auth'
 
 type Hráč = {
   id: string
@@ -58,6 +60,7 @@ export default function NewGame() {
     setSubmitting(true)
 
     try {
+      const currentUser = getAuthUser()
       const res = await fetch('/api/games', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
@@ -67,6 +70,7 @@ export default function NewGame() {
           date: matchDate,
           player1_score: player1Score,
           player2_score: player2Score,
+          created_by: currentUser,
         }),
       })
 
@@ -82,7 +86,7 @@ export default function NewGame() {
 
   if (loading) return <div className="min-h-screen bg-white flex items-center justify-center text-black text-sm sm:text-base">Načítání...</div>
 
-  return (
+  const formContent = (
     <div className="min-h-screen bg-white">
       <Navigation />
 
@@ -230,4 +234,6 @@ export default function NewGame() {
       </div>
     </div>
   )
+
+  return <AuthGuard>{formContent}</AuthGuard>
 }

@@ -21,6 +21,7 @@ export async function GET() {
           player1_name: p1.data?.name,
           player2_name: p2.data?.name,
           winner_name: winner.data?.name,
+          created_by: match.created_by,
         }
       }) || []
     )
@@ -33,7 +34,7 @@ export async function GET() {
 
 export async function POST(request: Request) {
   try {
-    const { player1_id, player2_id, date, player1_score, player2_score } = await request.json()
+    const { player1_id, player2_id, date, player1_score, player2_score, created_by } = await request.json()
 
     if (!player1_id || !player2_id || !date || player1_score === undefined || player2_score === undefined) {
       return NextResponse.json({ error: 'Missing required fields' }, { status: 400 })
@@ -52,6 +53,7 @@ export async function POST(request: Request) {
           player1_score,
           player2_score,
           winner_id,
+          created_by,
         },
       ])
       .select()

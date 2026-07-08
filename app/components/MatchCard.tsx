@@ -5,18 +5,22 @@ type Match = {
   date: string
   player1_score: number
   player2_score: number
+  created_by?: string
 }
 
 export default function MatchCard({ match }: { match: Match }) {
   return (
     <div className="border border-gray-200  p-5 hover:bg-blue-50 transition">
       <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4">
-        {/* Date */}
-        <div className="text-sm text-gray-500 min-w-fit">
-          {new Date(match.date).toLocaleDateString('cs-CZ', {
-            month: 'short',
-            day: 'numeric',
-          })}
+        {/* Date & Creator */}
+        <div className="min-w-fit">
+          <div className="text-sm text-gray-500">
+            {new Date(match.date).toLocaleDateString('cs-CZ', {
+              month: 'short',
+              day: 'numeric',
+            })}
+          </div>
+          {match.created_by && <div className="text-xs text-gray-400 mt-1">({match.created_by})</div>}
         </div>
 
         {/* Match Result - Main Focus */}

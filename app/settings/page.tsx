@@ -3,6 +3,7 @@
 import Link from 'next/link'
 import { useEffect, useState } from 'react'
 import Navigation from '@/app/components/Navigation'
+import AuthGuard from '@/app/components/AuthGuard'
 
 type Hráč = {
   id: string
@@ -73,7 +74,7 @@ export default function Nastavení() {
     }
   }
 
-  return (
+  const settingsContent = (
     <div className="min-h-screen bg-white">
       <Navigation />
 
@@ -132,4 +133,6 @@ export default function Nastavení() {
       </div>
     </div>
   )
+
+  return <AuthGuard>{settingsContent}</AuthGuard>
 }
