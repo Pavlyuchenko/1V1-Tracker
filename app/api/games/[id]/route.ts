@@ -1,8 +1,9 @@
 import { getSupabase } from '@/lib/supabase'
 import { NextResponse } from 'next/server'
 
-export async function PUT(request: Request, { params }: { params: { id: string } }) {
+export async function PUT(request: Request, { params }: { params: Promise<{ id: string }> }) {
   try {
+    const { id } = await params
     const { player1_id, player2_id, player1_score, player2_score, date, edited_by } = await request.json()
 
     if (!player1_id || !player2_id || !date || player1_score === undefined || player2_score === undefined) {
@@ -24,7 +25,7 @@ export async function PUT(request: Request, { params }: { params: { id: string }
         edited_by,
         edited_at: new Date().toISOString(),
       })
-      .eq('id', params.id)
+      .eq('id', id)
       .select()
 
     if (error) throw error
