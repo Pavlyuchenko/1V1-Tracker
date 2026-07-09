@@ -34,18 +34,30 @@ type FullMatch = {
 };
 
 async function fetchData() {
+  console.log('[fetchData] Starting...');
   try {
+    console.log('[fetchData] Fetching from APIs...');
     const [matchesRes, statsRes, recentStatsRes] = await Promise.all([
       fetch('/api/games'),
       fetch('/api/stats'),
       fetch('/api/recent-stats'),
     ]);
 
+    console.log('[fetchData] Response statuses:', {
+      matches: matchesRes.status,
+      stats: statsRes.status,
+      recentStats: recentStatsRes.status,
+    });
+
     const matchesData: FullMatch[] = await matchesRes.json();
     const statsData: HráčStats[] = await statsRes.json();
     const recentStatsData: HráčStats[] = await recentStatsRes.json();
 
-    console.log('Fetched data:', { matchesData, statsData, recentStatsData });
+    console.log('[fetchData] Parsed data lengths:', {
+      matchesData: matchesData?.length || 0,
+      statsData: statsData?.length || 0,
+      recentStatsData: recentStatsData?.length || 0,
+    });
 
     const playerMap = new Map(statsData.map((p) => [p.id, p.name]));
 
@@ -58,14 +70,23 @@ async function fetchData() {
       player2_score: m.player2_score,
     }));
 
-    return {
+    const result = {
       stats: statsData || [],
       recentStats: recentStatsData || [],
       allMatches: matchesData || [],
       recentMatches: transformedMatches.slice(0, 5),
     };
+
+    console.log('[fetchData] Final result:', {
+      stats: result.stats.length,
+      recentStats: result.recentStats.length,
+      allMatches: result.allMatches.length,
+      recentMatches: result.recentMatches.length,
+    });
+
+    return result;
   } catch (error) {
-    console.error("Failed to fetch data:", error);
+    console.error("[fetchData] Error:", error);
     return {
       stats: [],
       recentStats: [],
