@@ -2,6 +2,8 @@ import Link from "next/link";
 import Navigation from "@/app/components/Navigation";
 import TableSelector from "@/app/components/TableSelector";
 
+export const dynamic = 'force-dynamic';
+
 type Match = {
   id: string;
   player1_name: string;
