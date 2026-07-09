@@ -1,8 +1,10 @@
-import Link from "next/link";
-import Navigation from "@/app/components/Navigation";
-import TableSelector from "@/app/components/TableSelector";
+'use client';
 
-export const dynamic = 'force-dynamic';
+import Link from 'next/link';
+import { useEffect, useState } from 'react';
+import Navigation from '@/app/components/Navigation';
+import TableSelector from '@/app/components/TableSelector';
+import MatchCard from '@/app/components/MatchCard';
 
 type Match = {
   id: string;
@@ -35,94 +37,50 @@ type FullMatch = {
   date: string;
 };
 
-async function fetchData() {
-  console.log('[fetchData] Starting...');
-  try {
-    const baseUrl = process.env.VERCEL_URL
-      ? `https://${process.env.VERCEL_URL}`
-      : 'http://localhost:3000';
+export default function Home() {
+  const [stats, setStats] = useState<HráčStats[]>([]);
+  const [recentStats, setRecentStats] = useState<HráčStats[]>([]);
+  const [allMatches, setAllMatches] = useState<FullMatch[]>([]);
+  const [recentMatches, setRecentMatches] = useState<Match[]>([]);
+  const [loading, setLoading] = useState(true);
 
-    const urls = {
-      games: `${baseUrl}/api/games`,
-      stats: `${baseUrl}/api/stats`,
-      recentStats: `${baseUrl}/api/recent-stats`,
-    };
+  useEffect(() => {
+    fetchData();
+  }, []);
 
-    console.log('[fetchData] Base URL:', baseUrl);
-    console.log('[fetchData] Fetch URLs:', urls);
+  const fetchData = async () => {
+    try {
+      const [matchesRes, statsRes, recentStatsRes] = await Promise.all([
+        fetch('/api/games'),
+        fetch('/api/stats'),
+        fetch('/api/recent-stats'),
+      ]);
 
-    const [matchesRes, statsRes, recentStatsRes] = await Promise.all([
-      fetch(urls.games),
-      fetch(urls.stats),
-      fetch(urls.recentStats),
-    ]);
+      const matchesData: FullMatch[] = await matchesRes.json();
+      const statsData: HráčStats[] = await statsRes.json();
+      const recentStatsData: HráčStats[] = await recentStatsRes.json();
 
-    console.log('[fetchData] Response statuses:', {
-      matches: matchesRes.status,
-      stats: statsRes.status,
-      recentStats: recentStatsRes.status,
-    });
+      setStats(statsData || []);
+      setRecentStats(recentStatsData || []);
+      setAllMatches(matchesData || []);
 
-    // Log response bodies before parsing
-    const matchesText = await matchesRes.text();
-    const statsText = await statsRes.text();
-    const recentStatsText = await recentStatsRes.text();
+      const playerMap = new Map(statsData.map((p) => [p.id, p.name]));
+      const transformed: Match[] = (matchesData || []).map((m) => ({
+        id: m.id,
+        player1_name: playerMap.get(m.player1_id) || 'Unknown',
+        player2_name: playerMap.get(m.player2_id) || 'Unknown',
+        date: m.date,
+        player1_score: m.player1_score,
+        player2_score: m.player2_score,
+      }));
 
-    console.log('[fetchData] Response texts (first 100 chars):', {
-      matches: matchesText.substring(0, 100),
-      stats: statsText.substring(0, 100),
-      recentStats: recentStatsText.substring(0, 100),
-    });
-
-    const matchesData: FullMatch[] = JSON.parse(matchesText);
-    const statsData: HráčStats[] = JSON.parse(statsText);
-    const recentStatsData: HráčStats[] = JSON.parse(recentStatsText);
-
-    console.log('[fetchData] Parsed data lengths:', {
-      matchesData: matchesData?.length || 0,
-      statsData: statsData?.length || 0,
-      recentStatsData: recentStatsData?.length || 0,
-    });
-
-    const playerMap = new Map(statsData.map((p) => [p.id, p.name]));
-
-    const transformedMatches: Match[] = (matchesData || []).map((m) => ({
-      id: m.id,
-      player1_name: playerMap.get(m.player1_id) || "Unknown",
-      player2_name: playerMap.get(m.player2_id) || "Unknown",
-      date: m.date,
-      player1_score: m.player1_score,
-      player2_score: m.player2_score,
-    }));
-
-    const result = {
-      stats: statsData || [],
-      recentStats: recentStatsData || [],
-      allMatches: matchesData || [],
-      recentMatches: transformedMatches.slice(0, 5),
-    };
-
-    console.log('[fetchData] Final result:', {
-      stats: result.stats.length,
-      recentStats: result.recentStats.length,
-      allMatches: result.allMatches.length,
-      recentMatches: result.recentMatches.length,
-    });
-
-    return result;
-  } catch (error) {
-    console.error("[fetchData] Error:", error);
-    return {
-      stats: [],
-      recentStats: [],
-      allMatches: [],
-      recentMatches: [],
-    };
-  }
-}
-
-export default async function Home() {
-  const { stats, recentStats, allMatches, recentMatches } = await fetchData();
+      setRecentMatches(transformed.slice(0, 5));
+    } catch (error) {
+      console.error('Failed to fetch data:', error);
+    } finally {
+      setLoading(false);
+    }
+  };
 
   return (
     <div className="min-h-screen bg-gray-50">
@@ -130,35 +88,60 @@ export default async function Home() {
 
       {/* Main Content */}
       <div className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
-        <TableSelector
-          stats={stats}
-          recentStats={recentStats}
-          allMatches={allMatches}
-          recentMatches={recentMatches}
-        />
+        {loading ? (
+          <div className="text-center py-12 text-gray-600">Načítání...</div>
+        ) : (
+          <>
+            <TableSelector
+              stats={stats}
+              recentStats={recentStats}
+              allMatches={allMatches}
+              recentMatches={recentMatches}
+            />
 
-        {stats.length === 0 && (
-          <div className="text-center py-12 text-gray-600">
-            <p className="mb-3">Zatím žádní hráči nebo zápasy.</p>
-            <Link
-              href="/settings"
-              className="text-blue-600 hover:text-blue-700 font-medium inline-block"
-            >
-              👤 Přidat hráče →
-            </Link>
-          </div>
-        )}
+            {stats.length === 0 && (
+              <div className="text-center py-12 text-gray-600">
+                <p className="mb-3">Zatím žádní hráči nebo zápasy.</p>
+                <Link
+                  href="/settings"
+                  className="text-blue-600 hover:text-blue-700 font-medium inline-block"
+                >
+                  👤 Přidat hráče →
+                </Link>
+              </div>
+            )}
 
-        {recentMatches.length === 0 && stats.length > 0 && (
-          <div className="text-gray-600 text-center py-8">
-            Zatím nejsou zaznamenány žádné zápasy.{" "}
-            <Link
-              href="/new-game"
-              className="text-blue-600 hover:text-blue-700 font-medium"
-            >
-              Vytvoř jeden!
-            </Link>
-          </div>
+            {recentMatches.length === 0 && stats.length > 0 && (
+              <div className="text-gray-600 text-center py-8">
+                Zatím nejsou zaznamenány žádné zápasy.{' '}
+                <Link
+                  href="/new-game"
+                  className="text-blue-600 hover:text-blue-700 font-medium"
+                >
+                  Vytvoř jeden!
+                </Link>
+              </div>
+            )}
+
+            {recentMatches.length > 0 && (
+              <div className="bg-white shadow-sm border border-gray-200 p-8">
+                <h2 className="text-2xl font-bold text-black mb-6">
+                  Poslední zápasy
+                </h2>
+                <div className="space-y-3">
+                  {recentMatches.map((match) => (
+                    <MatchCard key={match.id} match={match} />
+                  ))}
+                  <Link
+                    href="/games"
+                    className="inline-block mt-6 text-blue-600 hover:text-blue-700 font-semibold"
+                  >
+                    Zobrazit všechny zápasy →
+                  </Link>
+                </div>
+              </div>
+            )}
+          </>
         )}
       </div>
     </div>
