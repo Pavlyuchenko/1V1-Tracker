@@ -135,8 +135,8 @@ export default function Pravidla() {
               </p>
               <p>
                 Pokud postižený hráč po penaltě nedá gól a nezbývá mu již v
-                tento moment žádná další penalta, rozehrává postižený hráč ze
-                svého vlastního brankoviště se dvěma doteky.
+                tento moment žádná další penalta, rozehrává faulujicí hráč
+                jedním dotekem ze svého brankoviště.
               </p>
             </div>
           </div>

@@ -45,9 +45,9 @@ export default function Home() {
   const [stats, setStats] = useState<HráčStats[]>([]);
   const [recentStats, setRecentStats] = useState<HráčStats[]>([]);
   const [loading, setLoading] = useState(true);
-  const [sortKey, setSortKey] = useState<SortKey>("wins");
+  const [sortKey, setSortKey] = useState<SortKey>("winRate");
   const [sortDir, setSortDir] = useState<SortDirection>("desc");
-  const [recentSortKey, setRecentSortKey] = useState<SortKey>("wins");
+  const [recentSortKey, setRecentSortKey] = useState<SortKey>("winRate");
   const [recentSortDir, setRecentSortDir] = useState<SortDirection>("desc");
   const [selectedPlayer1, setSelectedPlayer1] = useState<string>("");
   const [selectedPlayer2, setSelectedPlayer2] = useState<string>("");
@@ -227,7 +227,7 @@ export default function Home() {
                       Hráč{getSortIndicator("name", sortKey, sortDir)}
                     </th>
                     <th
-                      className="px-3 py-2 text-center text-sm font-bold text-blue-600 cursor-pointer hover:text-blue-700"
+                      className="px-3 py-2 text-center text-sm font-bold text-black cursor-pointer hover:text-blue-600"
                       onClick={() => handleSort("wins")}
                     >
                       Výhry{getSortIndicator("wins", sortKey, sortDir)}
@@ -239,7 +239,7 @@ export default function Home() {
                       Prohry{getSortIndicator("losses", sortKey, sortDir)}
                     </th>
                     <th
-                      className="px-3 py-2 text-center text-sm font-bold text-black cursor-pointer hover:text-blue-600"
+                      className="px-3 py-2 text-center text-sm font-bold text-blue-600 cursor-pointer hover:text-blue-700"
                       onClick={() => handleSort("winRate")}
                     >
                       Winrate{getSortIndicator("winRate", sortKey, sortDir)}
@@ -270,14 +270,14 @@ export default function Home() {
                       <td className="px-3 py-2 font-semibold text-black">
                         {player.name}
                       </td>
-                      <td className="px-3 py-2 text-center font-bold text-blue-600">
+                      <td className="px-3 py-2 text-center font-bold text-black">
                         {player.wins}
                       </td>
                       <td className="px-3 py-2 text-center text-black font-medium">
                         {player.losses}
                       </td>
-                      <td className="px-3 py-2 text-center text-black font-medium">
-                        {player.winRate} %
+                      <td className="px-3 py-2 text-center font-bold text-blue-600">
+                        {player.winRate}%
                       </td>
                       <td className="px-3 py-2 text-center text-black font-medium">
                         {player.goalsFor}-{player.goalsAgainst}
@@ -335,7 +335,7 @@ export default function Home() {
                       {getSortIndicator("name", recentSortKey, recentSortDir)}
                     </th>
                     <th
-                      className="px-3 py-2 text-center text-sm font-bold text-blue-600 cursor-pointer hover:text-blue-700"
+                      className="px-3 py-2 text-center text-sm font-bold text-black cursor-pointer hover:text-blue-600"
                       onClick={() => handleRecentSort("wins")}
                     >
                       Výhry
@@ -349,7 +349,7 @@ export default function Home() {
                       {getSortIndicator("losses", recentSortKey, recentSortDir)}
                     </th>
                     <th
-                      className="px-3 py-2 text-center text-sm font-bold text-black cursor-pointer hover:text-blue-600"
+                      className="px-3 py-2 text-center text-sm font-bold text-blue-600 cursor-pointer hover:text-blue-700"
                       onClick={() => handleRecentSort("winRate")}
                     >
                       Winrate
@@ -396,14 +396,14 @@ export default function Home() {
                         <td className="px-3 py-2 font-semibold text-black">
                           {player.name}
                         </td>
-                        <td className="px-3 py-2 text-center font-bold text-blue-600">
+                        <td className="px-3 py-2 text-center font-bold text-black">
                           {player.wins}
                         </td>
                         <td className="px-3 py-2 text-center text-black font-medium">
                           {player.losses}
                         </td>
-                        <td className="px-3 py-2 text-center text-black font-medium">
-                          {player.winRate} %
+                        <td className="px-3 py-2 text-center font-bold text-blue-600">
+                          {player.winRate}%
                         </td>
                         <td className="px-3 py-2 text-center text-black font-medium">
                           {player.goalsFor}-{player.goalsAgainst}
