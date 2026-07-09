@@ -35,12 +35,10 @@ type FullMatch = {
 
 async function fetchData() {
   try {
-    const baseUrl = process.env.NEXT_PUBLIC_API_URL || "http://localhost:3000";
-
     const [matchesRes, statsRes, recentStatsRes] = await Promise.all([
-      fetch(`${baseUrl}/api/games`, { cache: "no-store" }),
-      fetch(`${baseUrl}/api/stats`, { cache: "no-store" }),
-      fetch(`${baseUrl}/api/recent-stats`, { cache: "no-store" }),
+      fetch('/api/games', { cache: "no-store" }),
+      fetch('/api/stats', { cache: "no-store" }),
+      fetch('/api/recent-stats', { cache: "no-store" }),
     ]);
 
     const matchesData: FullMatch[] = await matchesRes.json();
