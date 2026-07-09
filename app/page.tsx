@@ -42,12 +42,19 @@ async function fetchData() {
       ? `https://${process.env.VERCEL_URL}`
       : 'http://localhost:3000';
 
+    const urls = {
+      games: `${baseUrl}/api/games`,
+      stats: `${baseUrl}/api/stats`,
+      recentStats: `${baseUrl}/api/recent-stats`,
+    };
+
     console.log('[fetchData] Base URL:', baseUrl);
-    console.log('[fetchData] Fetching from APIs...');
+    console.log('[fetchData] Fetch URLs:', urls);
+
     const [matchesRes, statsRes, recentStatsRes] = await Promise.all([
-      fetch(`${baseUrl}/api/games`),
-      fetch(`${baseUrl}/api/stats`),
-      fetch(`${baseUrl}/api/recent-stats`),
+      fetch(urls.games),
+      fetch(urls.stats),
+      fetch(urls.recentStats),
     ]);
 
     console.log('[fetchData] Response statuses:', {
@@ -56,9 +63,20 @@ async function fetchData() {
       recentStats: recentStatsRes.status,
     });
 
-    const matchesData: FullMatch[] = await matchesRes.json();
-    const statsData: HráčStats[] = await statsRes.json();
-    const recentStatsData: HráčStats[] = await recentStatsRes.json();
+    // Log response bodies before parsing
+    const matchesText = await matchesRes.text();
+    const statsText = await statsRes.text();
+    const recentStatsText = await recentStatsRes.text();
+
+    console.log('[fetchData] Response texts (first 100 chars):', {
+      matches: matchesText.substring(0, 100),
+      stats: statsText.substring(0, 100),
+      recentStats: recentStatsText.substring(0, 100),
+    });
+
+    const matchesData: FullMatch[] = JSON.parse(matchesText);
+    const statsData: HráčStats[] = JSON.parse(statsText);
+    const recentStatsData: HráčStats[] = JSON.parse(recentStatsText);
 
     console.log('[fetchData] Parsed data lengths:', {
       matchesData: matchesData?.length || 0,
