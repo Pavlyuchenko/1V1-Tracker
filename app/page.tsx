@@ -38,11 +38,16 @@ type FullMatch = {
 async function fetchData() {
   console.log('[fetchData] Starting...');
   try {
+    const baseUrl = process.env.VERCEL_URL
+      ? `https://${process.env.VERCEL_URL}`
+      : 'http://localhost:3000';
+
+    console.log('[fetchData] Base URL:', baseUrl);
     console.log('[fetchData] Fetching from APIs...');
     const [matchesRes, statsRes, recentStatsRes] = await Promise.all([
-      fetch('/api/games'),
-      fetch('/api/stats'),
-      fetch('/api/recent-stats'),
+      fetch(`${baseUrl}/api/games`),
+      fetch(`${baseUrl}/api/stats`),
+      fetch(`${baseUrl}/api/recent-stats`),
     ]);
 
     console.log('[fetchData] Response statuses:', {
