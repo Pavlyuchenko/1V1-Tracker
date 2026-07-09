@@ -66,37 +66,43 @@ export default function RecentStatsTable({ data }: RecentStatsTableProps) {
               Pořadí
             </th>
             <th
-              className="px-3 py-2 text-left text-sm font-bold text-black cursor-pointer hover:text-blue-600"
+              className="px-3 py-2 text-left text-sm font-bold text-black cursor-pointer hover:text-blue-600 overflow-hidden text-ellipsis"
               onClick={() => handleSort('name')}
             >
               Hráč{getSortIndicator('name')}
             </th>
             <th
-              className="px-3 py-2 text-center text-sm font-bold text-black cursor-pointer hover:text-blue-600"
+              className="px-3 py-2 text-center text-sm font-bold text-black cursor-pointer hover:text-blue-600 overflow-hidden text-ellipsis"
+              onClick={() => handleSort('total')}
+            >
+              Zápasy{getSortIndicator('total')}
+            </th>
+            <th
+              className="px-3 py-2 text-center text-sm font-bold text-black cursor-pointer hover:text-blue-600 overflow-hidden text-ellipsis"
               onClick={() => handleSort('wins')}
             >
               Výhry{getSortIndicator('wins')}
             </th>
             <th
-              className="px-3 py-2 text-center text-sm font-bold text-black cursor-pointer hover:text-blue-600"
+              className="px-3 py-2 text-center text-sm font-bold text-black cursor-pointer hover:text-blue-600 overflow-hidden text-ellipsis"
               onClick={() => handleSort('losses')}
             >
               Prohry{getSortIndicator('losses')}
             </th>
             <th
-              className="px-3 py-2 text-center text-sm font-bold text-blue-600 cursor-pointer hover:text-blue-700"
+              className="px-3 py-2 text-center text-sm font-bold text-blue-600 cursor-pointer hover:text-blue-700 overflow-hidden text-ellipsis"
               onClick={() => handleSort('winRate')}
             >
               Winrate{getSortIndicator('winRate')}
             </th>
             <th
-              className="px-3 py-2 text-center text-sm font-bold text-black cursor-pointer hover:text-blue-600"
+              className="px-3 py-2 text-center text-sm font-bold text-black cursor-pointer hover:text-blue-600 overflow-hidden text-ellipsis"
               onClick={() => handleSort('goalsFor')}
             >
               Góly{getSortIndicator('goalsFor')}
             </th>
             <th
-              className="px-3 py-2 text-center text-sm font-bold text-black cursor-pointer hover:text-blue-600"
+              className="px-3 py-2 text-center text-sm font-bold text-black cursor-pointer hover:text-blue-600 overflow-hidden text-ellipsis"
               onClick={() => handleSort('goalRozdíl')}
             >
               GD{getSortIndicator('goalRozdíl')}
@@ -114,6 +120,9 @@ export default function RecentStatsTable({ data }: RecentStatsTableProps) {
               </td>
               <td className="px-3 py-2 font-semibold text-black">
                 {player.name}
+              </td>
+              <td className="px-3 py-2 text-center text-black font-medium">
+                {player.total}
               </td>
               <td className="px-3 py-2 text-center font-bold text-black">
                 {player.wins}

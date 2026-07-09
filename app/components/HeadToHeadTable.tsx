@@ -145,6 +145,9 @@ export default function HeadToHeadTable({ players, allMatches }: HeadToHeadTable
                         Hráč
                       </th>
                       <th className="px-3 py-2 text-center text-sm font-bold text-black">
+                        Zápasy
+                      </th>
+                      <th className="px-3 py-2 text-center text-sm font-bold text-black">
                         Výhry
                       </th>
                       <th className="px-3 py-2 text-center text-sm font-bold text-black">
@@ -163,6 +166,9 @@ export default function HeadToHeadTable({ players, allMatches }: HeadToHeadTable
                       <td className="px-3 py-2 font-semibold text-black">
                         {player1.name}
                       </td>
+                      <td className="px-3 py-2 text-center text-black font-medium">
+                        {player1Stats.wins + player1Stats.losses}
+                      </td>
                       <td className="px-3 py-2 text-center font-bold text-black">
                         {player1Stats.wins}
                       </td>
@@ -180,6 +186,9 @@ export default function HeadToHeadTable({ players, allMatches }: HeadToHeadTable
                     <tr className="border-b border-gray-200 hover:bg-blue-50 transition">
                       <td className="px-3 py-2 font-semibold text-black">
                         {player2.name}
+                      </td>
+                      <td className="px-3 py-2 text-center text-black font-medium">
+                        {player2Stats.wins + player2Stats.losses}
                       </td>
                       <td className="px-3 py-2 text-center font-bold text-black">
                         {player2Stats.wins}
