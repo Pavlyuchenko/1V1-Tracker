@@ -36,14 +36,16 @@ type FullMatch = {
 async function fetchData() {
   try {
     const [matchesRes, statsRes, recentStatsRes] = await Promise.all([
-      fetch('/api/games', { cache: "no-store" }),
-      fetch('/api/stats', { cache: "no-store" }),
-      fetch('/api/recent-stats', { cache: "no-store" }),
+      fetch('/api/games'),
+      fetch('/api/stats'),
+      fetch('/api/recent-stats'),
     ]);
 
     const matchesData: FullMatch[] = await matchesRes.json();
     const statsData: HráčStats[] = await statsRes.json();
     const recentStatsData: HráčStats[] = await recentStatsRes.json();
+
+    console.log('Fetched data:', { matchesData, statsData, recentStatsData });
 
     const playerMap = new Map(statsData.map((p) => [p.id, p.name]));
 
