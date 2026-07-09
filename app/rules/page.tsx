@@ -40,6 +40,12 @@ export default function Pravidla() {
             <strong>2.3</strong> Soupeř nesmí záměrně blokovat rozehrávku v
             bezprostřední blízkosti.
           </p>
+          <p>
+            <strong>2.4</strong> Mají-li oba hráči jinou preferenci hracího
+            míče, je možné v průběhu zápasu použít více míčů, standardem je však
+            běžný fotbalový míč číslo 5. K výměně míče může hráč přistoupit
+            pouze při vlastní rozehrávce z brankoviště po obdrženém gólu.
+          </p>
 
           <h2 className="text-xl sm:text-2xl font-bold text-black mt-3 sm:mt-4">
             3. Počet Doteků
@@ -126,6 +132,11 @@ export default function Pravidla() {
               <p>
                 Každá další penalizace vyústí ve dva pokusy na vstřelení gólu do
                 prázdné branky.
+              </p>
+              <p>
+                Pokud postižený hráč po penaltě nedá gól a nezbývá mu již v
+                tento moment žádná další penalta, rozehrává postižený hráč ze
+                svého vlastního brankoviště se dvěma doteky.
               </p>
             </div>
           </div>
