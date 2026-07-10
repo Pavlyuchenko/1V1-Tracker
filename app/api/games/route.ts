@@ -8,6 +8,7 @@ export async function GET() {
       .from('matches')
       .select('*')
       .order('date', { ascending: false })
+      .order('created_at', { ascending: false })
 
     const enrichedZápasy = await Promise.all(
       matches?.map(async (match: any) => {

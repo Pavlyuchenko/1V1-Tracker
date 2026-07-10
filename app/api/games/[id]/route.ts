@@ -4,7 +4,7 @@ import { NextResponse } from 'next/server'
 export async function PUT(request: Request, { params }: { params: Promise<{ id: string }> }) {
   try {
     const { id } = await params
-    const { player1_id, player2_id, player1_score, player2_score, date, edited_by } = await request.json()
+    const { player1_id, player2_id, player1_score, player2_score, date } = await request.json()
 
     if (!player1_id || !player2_id || !date || player1_score === undefined || player2_score === undefined) {
       return NextResponse.json({ error: 'Missing required fields' }, { status: 400 })
@@ -22,8 +22,6 @@ export async function PUT(request: Request, { params }: { params: Promise<{ id: 
         player1_score,
         player2_score,
         winner_id,
-        edited_by,
-        edited_at: new Date().toISOString(),
       })
       .eq('id', id)
       .select()
@@ -41,6 +39,10 @@ export async function PUT(request: Request, { params }: { params: Promise<{ id: 
       supabase.from('players').select('name').eq('id', match.winner_id).single(),
     ])
 
+    if (p1.error || p2.error || winner.error) {
+      throw new Error(`Failed to fetch player names: p1=${p1.error?.message}, p2=${p2.error?.message}, winner=${winner.error?.message}`)
+    }
+
     return NextResponse.json({
       ...match,
       player1_name: p1.data?.name,
@@ -48,6 +50,7 @@ export async function PUT(request: Request, { params }: { params: Promise<{ id: 
       winner_name: winner.data?.name,
     })
   } catch (error) {
+    console.error('[PUT /api/games/[id]]', error)
     return NextResponse.json({ error: 'Aktualizace zápasu se nezdařila' }, { status: 500 })
   }
 }

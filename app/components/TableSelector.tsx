@@ -127,25 +127,6 @@ export default function TableSelector({
           <HeadToHeadTable players={stats} allMatches={allMatches} />
         </div>
       )}
-
-      {/* Poslední zápasy Section */}
-      <div className="bg-white shadow-sm border border-gray-200 p-8">
-        <h2 className="text-2xl font-bold text-black mb-6">
-          Poslední zápasy
-        </h2>
-
-        {recentMatches.length === 0 ? (
-          <div className="text-gray-600 text-center py-8">
-            Zatím nejsou zaznamenány žádné zápasy.
-          </div>
-        ) : (
-          <div className="space-y-3">
-            {recentMatches.map((match) => (
-              <MatchCard key={match.id} match={match} />
-            ))}
-          </div>
-        )}
-      </div>
     </>
   );
 }
